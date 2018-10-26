@@ -2,7 +2,10 @@
 Mango-JWT
 =========
 
-Mango-JWT is a minimal JWT User Authentication tool for Django Rest Framework and MongoDB. Recommended for developers using django-rest-framework and pymongo. Not supported in versions below Django 2.0.
+Mango-JWT is a minimal JWT User Authentication tool for Django Rest Framework and MongoDB. Recommended for developers using django-rest-framework and pymongo. Not supported in versions below Django 2.0. ::
+
+    pip install mango-jwt
+
 
 
 Quick start
