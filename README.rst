@@ -93,5 +93,3 @@ More Work To Do
 1. Fields like "username", "mobile" or some unique field should be supportable during login.
 
 2. Permission Class or Mixin to support Class based views.
-
-3. Make components overridable to extend its functionality for
