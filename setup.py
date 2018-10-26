@@ -10,7 +10,7 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name='mango-jwt',
-    version='1.1',
+    version='1.0.0',
     packages=find_packages(),
     install_requires=[
         "Django>=2.0",
@@ -23,7 +23,7 @@ setup(
     include_package_data=True,
     description='JWT Authentication for Django Rest Framework and MongoDB',
     long_description=README,
-    url="https://github.com/pypa/sampleproject",
+    url="https://github.com/srijannnd/mango-jwt",
     author='Srijan Anand',
     author_email='srijan.pydev@gmail.com',
     classifiers=[
