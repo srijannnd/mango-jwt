@@ -90,6 +90,6 @@ More Info
 More Work To Do
 ---------------
 
-1. Fields like "username", "mobile" or some unique field should be supportable during login.
+1. Fields like "username", "mobile" or some unique field should be supportable for login.
 
 2. Permission Class or Mixin to support Class based views.
