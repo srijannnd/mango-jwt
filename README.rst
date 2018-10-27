@@ -62,29 +62,57 @@ Quick start
         "password": "some_password"
     }
 
-6. This will return a JWT. Pass this JWT in your request in "Authorization" header.
+6. This will return a JWT. Pass this JWT in your request in **"Authorization"** header.
 
-7. You can use **login_required** as a decorator in your views. Look at an example below.::
+---------------------------
+AuthenticatedOnly
+---------------------------
 
-    from mongo_auth.utils import login_required
+The **AuthenticatedOnly** permission class will only allow authenticated users to access your endpoint. ::
 
+    from rest_framework.views import APIView
+    from mongo_auth.permissions import AuthenticatedOnly
+    from rest_framework.response import Response
+    from rest_framework import status
+
+    class GetTest(APIView):
+
+        permission_classes = [AuthenticatedOnly]
+
+        def get(self, request, format=None):
+            try:
+                print(request.user)  # This is where magic happens
+                return Response(status=status.HTTP_200_OK,
+                                data={"data": {"msg": "User Authenticated"}})
+            except:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+Or, if you're using the **@api_view** decorator with function based views. ::
+
+    from mongo_auth.permissions import AuthenticatedOnly
+    from rest_framework.decorators import permission_classes
+    from rest_framework.decorators import api_view
+    from rest_framework.response import Response
+    from rest_framework import status
 
     @api_view(["GET"])
-    @login_required
+    @permission_classes([AuthenticatedOnly])
     def get_test(request):
-        print(request.user)
-        return Response(status=status.HTTP_200_OK,
-                        data={"data": {"User already loggedin"}})
+        try:
+            print(request.user)
+            return Response(status=status.HTTP_200_OK,
+                            data={"data": {"msg": "User Authenticated"}})
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
 
-8. If user is already logged-in, you can use request.user to get user information (type dict).
-
-Note: **login_required** cannot be used on class based views as decorators cannot be used over classes. I will be creating a Permission class or Mixin in the next release.
+Don't forget to pass **"Authorization"** Header in your requests while using your views with **"AuthenticatedOnly"** Permission Class.
 
 More Info
 ---------
 
-1. Paaslib is used for password encryption with default scheme as "django_pbkdf2_sha256".
+1. Passlib is used for password encryption with default scheme as "django_pbkdf2_sha256".
 
 2. Only for Django 2.0 and above.
 
@@ -94,5 +122,3 @@ More Work To Do
 ---------------
 
 1. Fields like "username", "mobile" or some unique field should be supportable for login.
-
-2. Permission Class or Mixin to support Class based views.

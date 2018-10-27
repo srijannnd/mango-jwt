@@ -3,8 +3,7 @@ import jwt
 from passlib.context import CryptContext
 from mongo_auth.db import jwt_secret, auth_collection
 from mongo_auth.db import database
-from rest_framework.response import Response
-from rest_framework import status
+
 
 pwd_context = CryptContext(
     default="django_pbkdf2_sha256",
@@ -29,24 +28,3 @@ def login_status(request):
         flag = True
         user_obj = list(user_filter)[0]
     return flag, user_obj
-
-
-# Should be used as a Decorator for Authorization in APIs
-def login_required(f):
-    def wrap(request):
-        try:
-            flag, user_obj = login_status(request)
-            request.user = None
-            if flag:
-                request.user = user_obj
-                return f(request)
-            else:
-                return Response(status=status.HTTP_401_UNAUTHORIZED,
-                                data={"data": "Not logged in"})
-        except Exception as e:
-            return Response(status=status.HTTP_401_UNAUTHORIZED,
-                            data={"data": "Not logged in"})
-
-    wrap.__doc__ = f.__doc__
-    wrap.__name__ = f.__name__
-    return wrap
