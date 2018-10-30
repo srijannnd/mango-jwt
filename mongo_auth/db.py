@@ -22,3 +22,5 @@ fields = MANGO_JWT_SETTINGS['fields'] if 'fields' in MANGO_JWT_SETTINGS else ()
 jwt_secret = MANGO_JWT_SETTINGS['jwt_secret'] if 'jwt_secret' in MANGO_JWT_SETTINGS else 'secret'
 
 jwt_life = MANGO_JWT_SETTINGS['jwt_life'] if 'jwt_life' in MANGO_JWT_SETTINGS else 7
+
+secondary_username_field = MANGO_JWT_SETTINGS['secondary_username_field'] if 'secondary_username_field' in MANGO_JWT_SETTINGS else None

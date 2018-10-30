@@ -1,6 +1,6 @@
 from rest_framework.decorators import api_view
 from mongo_auth.utils import create_unique_object_id, pwd_context
-from mongo_auth.db import database, auth_collection, fields, jwt_life, jwt_secret
+from mongo_auth.db import database, auth_collection, fields, jwt_life, jwt_secret, secondary_username_field
 import jwt
 import datetime
 from mongo_auth import messages
@@ -22,12 +22,20 @@ def signup(request):
                                 data={"error_msg": field.title() + " does not exist."})
         signup_data["password"] = pwd_context.hash(signup_data["password"])
         if database[auth_collection].find_one({"email": signup_data['email']}) is None:
-            database[auth_collection].insert_one(signup_data)
-
-            return Response(status=status.HTTP_200_OK,
-                            data={"data": {
-                                "email": signup_data['email']
-                            }})
+            if secondary_username_field:
+                if database[auth_collection].find_one({secondary_username_field: signup_data[secondary_username_field]}) is None:
+                    database[auth_collection].insert_one(signup_data)
+                    res = {k: v for k, v in signup_data.items() if k not in ["_id", "password"]}
+                    return Response(status=status.HTTP_200_OK,
+                                    data={"data": res})
+                else:
+                    return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED,
+                                    data={"data": {"error_msg": messages.user_exists_field(secondary_username_field)}})
+            else:
+                database[auth_collection].insert_one(signup_data)
+                res = {k: v for k, v in signup_data.items() if k not in ["_id", "password"]}
+                return Response(status=status.HTTP_200_OK,
+                                data={"data": res})
         else:
             return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED,
                             data={"data": {"error_msg": messages.user_exists}})
@@ -43,9 +51,16 @@ def signup(request):
 def login(request):
     try:
         data = request.data if request.data is not None else {}
-        email = data['email']
+        username = data['username']
         password = data['password']
-        user = database[auth_collection].find_one({"email": email}, {"_id": 0})
+        if "@" in username:
+            user = database[auth_collection].find_one({"email": username}, {"_id": 0})
+        else:
+            if secondary_username_field:
+                user = database[auth_collection].find_one({secondary_username_field: username}, {"_id": 0})
+            else:
+                return Response(status=status.HTTP_403_FORBIDDEN,
+                                data={"data": {"error_msg": messages.user_not_found}})
         if user is not None:
             if pwd_context.verify(password, user["password"]):
                 token = jwt.encode({'id': user['id'],
@@ -55,10 +70,10 @@ def login(request):
                 return Response(status=status.HTTP_200_OK,
                                 data={"data": {"token": token}})
             else:
-                return Response(status=status.HTTP_200_OK,
+                return Response(status=status.HTTP_403_FORBIDDEN,
                                 data={"error_msg": messages.incorrect_password})
         else:
-            return Response(status=status.HTTP_200_OK,
+            return Response(status=status.HTTP_403_FORBIDDEN,
                             data={"data": {"error_msg": messages.user_not_found}})
     except ValidationError as v_error:
         return Response(status=status.HTTP_400_BAD_REQUEST,
