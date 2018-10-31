@@ -49,7 +49,9 @@ Quick start
         "secondary_username_field": "mobile" # default is None
     }
 
-4. If **secondary_username_field** is provided, users will be able to login with this field as well as "email". This is best for scenarios where you want users to login with either of their unique fields, such as you may want users to login with "email" or "mobile".
+4. If **secondary_username_field** is provided, users will be able to login with this field as well as "email". This is best for scenarios where you want users to login with either of their unique fields.
+
+   For example, you may want users to login with "email" or "mobile".
 
 5. You may or may not include "secondary_username_field" in "fields".
 
