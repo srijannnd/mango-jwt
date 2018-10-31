@@ -14,6 +14,9 @@ def signup(request):
     try:
         data = request.data if request.data is not None else {}
         signup_data = {"id": create_unique_object_id()}
+        all_fields = set(fields + ("email", "password"))
+        if secondary_username_field is not None:
+            all_fields.add(secondary_username_field)
         for field in set(fields + ("email", "password")):
             if field in data:
                 signup_data[field] = data[field]

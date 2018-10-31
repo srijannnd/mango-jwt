@@ -45,24 +45,35 @@ Quick start
         "auth_collection": "name_your_auth_collection", # default is "user_profile"
         "fields": ("email", "password"), # default
         "jwt_secret": "secret", # default
-        "jwt_life": 7 # default (in days)
+        "jwt_life": 7, # default (in days)
+        "secondary_username_field": "mobile" # default is None
     }
 
-4. Make a POST request on http://127.0.0.1:8000/mongo_auth/signup/ with body as :- ::
+
+4. If **secondary_username_field** is provided, users will be able to login with this field as well as "email". This is best for scenarios where you want users to login with either of their unique fields,
+such as you may want users to login with "email" and "mobile" as well.
+
+5. You may or may not include "secondary_username_field" in "fields".
+
+    **Note: "secondary_username_field" cannot be "email" as its "primary_username" and "secondary_username_field" will be set to None instead.**
+
+6. Make a POST request on http://127.0.0.1:8000/mongo_auth/signup/ with body as :- ::
 
     {
         "email": "some_email@email.com",
-        "password": "some_password"
+        "password": "some_password",
+        other_fields
+        ...
     }
 
-5. Now login with these credentials at http://127.0.0.1:8000/mongo_auth/login/ :- ::
+7. Now login with these credentials at http://127.0.0.1:8000/mongo_auth/login/ :- ::
 
     {
-        "email": "some_email@email.com",
+        "username": "some_email@email.com or secondary_username_field_value",
         "password": "some_password"
     }
 
-6. This will return a JWT. Pass this JWT in your request in **"Authorization"** header.
+8. This will return a JWT. Pass this JWT in your request in **"Authorization"** header.
 
 ---------------------------
 AuthenticatedOnly
@@ -108,6 +119,17 @@ Or, if you're using the **@api_view** decorator with function based views. ::
 
 
 Don't forget to pass **"Authorization"** Header in your requests while using your views with **"AuthenticatedOnly"** Permission Class.
+
+----------------------
+mongo_auth.db.database
+----------------------
+
+As the Mongo Connection Object has already been initialised in the package, You can use it directly::
+
+    from mongo_auth.db import database
+
+    print(list(database["collection_name"].find({}, {"_id": 0}).limit(10)))
+
 
 More Info
 ---------
