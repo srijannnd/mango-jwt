@@ -139,8 +139,3 @@ More Info
 2. Only for Django 2.0 and above.
 
 3. Dependent on "django-rest-framework" and "pymongo".
-
-More Work To Do
----------------
-
-1. Fields like "username", "mobile" or some unique field should be supportable for login.

@@ -10,7 +10,7 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name='mango-jwt',
-    version='1.2.1',
+    version='1.3.0',
     packages=find_packages(),
     install_requires=[
         "Django>=2.0",
