@@ -122,7 +122,7 @@ Don't forget to pass **"Authorization"** Header in your requests while using you
 mongo_auth.db.database
 ----------------------
 
-As the Mongo Connection Object has already been initialised in the package, You can use it directly::
+As the Mongo Connection Object has already been initialised in the package, you can use it directly::
 
     from mongo_auth.db import database
 
