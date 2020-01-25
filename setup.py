@@ -18,7 +18,8 @@ setup(
         "passlib",
         "PyJWT",
         "pymongo",
-        "pytz"
+        "pytz",
+        "dnspython"
     ],
     include_package_data=True,
     description='JWT Authentication for Django Rest Framework and MongoDB',

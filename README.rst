@@ -28,12 +28,13 @@ Quick start
 
     # Minimal settings (all mandatory)
     MANGO_JWT_SETTINGS = {
-        "db_host": "some_db_host",
-        "db_port": "some_db_port",
+        "db_host": "some_db_host", # Use srv host if connecting with MongoDB Atlas Cluster
+        "db_port": "some_db_port", # Don't include this field if connecting with MongoDB Atlas Cluster
         "db_name": "for_example_auth_db",
         "db_user": "username",
         "db_pass": "password"
     }
+
 
     # Or use Advanced Settings (including optional settings)
     MANGO_JWT_SETTINGS = {
@@ -48,6 +49,8 @@ Quick start
         "jwt_life": 7, # default (in days)
         "secondary_username_field": "mobile" # default is None
     }
+
+    #Note: If you are connecting MongoDB Atlas Cluster, don't include "db_port" and use srv host in "db_host" e.g. if your host is mongodb+srv://something.mongodb.net/test, then use "something.mongodb.net" as your host.
 
 4. If **secondary_username_field** is provided, users will be able to login with this field as well as "email". This is best for scenarios where you want users to login with either of their unique fields.
 
