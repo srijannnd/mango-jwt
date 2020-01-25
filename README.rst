@@ -50,7 +50,8 @@ Quick start
         "secondary_username_field": "mobile" # default is None
     }
 
-    #Note: If you are connecting MongoDB Atlas Cluster, don't include "db_port" and use srv host in "db_host" e.g. if your host is mongodb+srv://something.mongodb.net/test, then use "something.mongodb.net" as your host.
+
+**PLEASE NOTE: If you are connecting MongoDB Atlas Cluster, don't include "db_port" and use srv host in "db_host" e.g. if your host is showing mongodb+srv://something.mongodb.net/test in your account, then use "something.mongodb.net" as your host.**
 
 4. If **secondary_username_field** is provided, users will be able to login with this field as well as "email". This is best for scenarios where you want users to login with either of their unique fields.
 
