@@ -24,7 +24,18 @@ Quick start
 
     path('mongo_auth/', include('mongo_auth.urls')),
 
-3. Add DB config in settings.py :- ::
+3. Defining connections between applications and MongoDB in settings.py :- ::
+
+    # URI formats
+    MANGO_JWT_SETTINGS = {
+        "uri_connection": "mongodb://[username:password@]host1[:port1][,...hostN[:portN]][/[defaultauthdb][?options]]",
+        "db_name": "for_example_auth_db"
+    }
+    # Example (URI formats):
+        # For a standalone:
+            "mongodb://mongodb0.example.com:27017"
+        # For a standalone that enforces access control:
+            "mongodb://myDBReader:D1fficultP%40ssw0rd@mongodb0.example.com:27017/?authSource=admin"
 
     # Minimal settings (all mandatory)
     MANGO_JWT_SETTINGS = {
