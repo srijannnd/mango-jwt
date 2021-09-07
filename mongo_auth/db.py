@@ -4,20 +4,24 @@ import urllib.parse
 
 MANGO_JWT_SETTINGS = settings.MANGO_JWT_SETTINGS
 
-password = urllib.parse.quote(MANGO_JWT_SETTINGS['db_pass'])
-username = urllib.parse.quote(MANGO_JWT_SETTINGS['db_user'])
+# Check for using uri-scheme from user or parse configuration:
 db_name = MANGO_JWT_SETTINGS['db_name']
-db_host_mongo = MANGO_JWT_SETTINGS['db_host']
-
-if 'db_port' in MANGO_JWT_SETTINGS:
-    db_port_mongo = MANGO_JWT_SETTINGS['db_port']
-
-    mongo_uri = "mongodb://{username}:{password}@{db_host}:{db_port_mongo}/{db_name}".format(
-        username=username, password=password, db_host=db_host_mongo,
-        db_port_mongo=db_port_mongo, db_name=db_name)
+if 'uri_connection' in MANGO_JWT_SETTINGS:
+    mongo_uri = MANGO_JWT_SETTINGS['uri_connection']
 else:
-    mongo_uri = "mongodb+srv://{username}:{password}@{host}/{db_name}".format(
-        username=username, password=password, host=db_host_mongo, db_name=db_name)
+    password = urllib.parse.quote(MANGO_JWT_SETTINGS['db_pass'])
+    username = urllib.parse.quote(MANGO_JWT_SETTINGS['db_user'])
+    db_host_mongo = MANGO_JWT_SETTINGS['db_host']
+
+    if 'db_port' in MANGO_JWT_SETTINGS:
+        db_port_mongo = MANGO_JWT_SETTINGS['db_port']
+
+        mongo_uri = "mongodb://{username}:{password}@{db_host}:{db_port_mongo}/{db_name}".format(
+            username=username, password=password, db_host=db_host_mongo,
+            db_port_mongo=db_port_mongo, db_name=db_name)
+    else:
+        mongo_uri = "mongodb+srv://{username}:{password}@{host}/{db_name}".format(
+            username=username, password=password, host=db_host_mongo, db_name=db_name)
 
 client = MongoClient(mongo_uri)
 database = client[db_name]

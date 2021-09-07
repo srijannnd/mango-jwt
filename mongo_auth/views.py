@@ -69,7 +69,7 @@ def login(request):
                 token = jwt.encode({'id': user['id'],
                                     'exp': datetime.datetime.now() + datetime.timedelta(
                                         days=jwt_life)},
-                                   jwt_secret, algorithm='HS256').decode('utf-8')
+                                   jwt_secret, algorithm='HS256')
                 return Response(status=status.HTTP_200_OK,
                                 data={"data": {"token": token}})
             else:
