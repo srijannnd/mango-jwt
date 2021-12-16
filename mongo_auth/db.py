@@ -1,6 +1,7 @@
 from pymongo import MongoClient
 from django.conf import settings
 import urllib.parse
+import certifi
 
 MANGO_JWT_SETTINGS = settings.MANGO_JWT_SETTINGS
 
@@ -19,7 +20,7 @@ else:
     mongo_uri = "mongodb+srv://{username}:{password}@{host}/{db_name}".format(
         username=username, password=password, host=db_host_mongo, db_name=db_name)
 
-client = MongoClient(mongo_uri)
+client = MongoClient(mongo_uri, tlsCAFile=certifi.where())
 database = client[db_name]
 
 auth_collection = MANGO_JWT_SETTINGS['auth_collection'] if 'auth_collection' in MANGO_JWT_SETTINGS else "user_profile"
